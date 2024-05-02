@@ -158,7 +158,7 @@ const WebcamComponent = (props: any) => {
         ></canvas>
       </div>
       <div className="flex flex-col justify-center items-center">
-        <div className="flex gap-1 flex-row flex-wrap justify-center items-center m-5">
+        <div className="flex gap-1 flex-row flex-wrap justify-center items-center m-4">
           <div className="flex gap-1 justify-center items-center items-stretch">
             <button
               onClick={async () => {
@@ -198,7 +198,7 @@ const WebcamComponent = (props: any) => {
             >
               Switch Camera
             </button>
-            <button
+            {/* <button
               onClick={() => {
                 reset();
                 props.changeModelResolution();
@@ -206,7 +206,7 @@ const WebcamComponent = (props: any) => {
               className="p-2  border-dashed border-2 rounded-xl hover:translate-y-1 "
             >
               Change Model
-            </button>
+            </button> */}
             <button
               onClick={reset}
               className="p-2  border-dashed border-2 rounded-xl hover:translate-y-1 "
@@ -215,7 +215,7 @@ const WebcamComponent = (props: any) => {
             </button>
           </div>
         </div>
-        <div>Using {props.modelName}</div>
+        <div>Using YOLOv7 Model</div>
         <div className="flex gap-3 flex-row flex-wrap justify-between items-center px-5 w-full">
           <div>
             {"Model Inference Time: " + inferenceTime.toFixed() + "ms"}

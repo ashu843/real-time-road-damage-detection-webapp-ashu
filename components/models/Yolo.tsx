@@ -7,12 +7,35 @@ import { yoloClasses } from "../../data/yolo_classes";
 import { useState } from "react";
 import { useEffect } from "react";
 import { runModelUtils } from "../../utils";
+import fs from 'fs';
+
+
+let latt = 0.000
+let lngg = 0.000
 
 const RES_TO_MODEL: [number[], string][] = [
-  [[256,256], "yolov7-tiny_256x256.onnx"],
-  [[320, 320], "yolov7-tiny_320x320.onnx"],
   [[640, 640], "yolov7-tiny_640x640.onnx"],
+  //[[256,256], "yolov7-tiny_256x256.onnx"],
+  //[[320, 320], "yolov7-tiny_320x320.onnx"],
+  //[[640, 640], "yolov7-tiny_640x640_original.onnx"],
 ];
+
+const saveToCSV = async (latitude: number, longitude: number) => {
+  try {
+    const response = await fetch('http://localhost:5000/save-to-csv', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ latitude, longitude }),
+    });
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error('Error saving data:', error);
+  }
+};
+
 
 const Yolo = (props: any) => {
   const [modelResolution, setModelResolution] = useState<number[]>(
@@ -32,14 +55,14 @@ const Yolo = (props: any) => {
   }, [modelName]);
 
   const changeModelResolution = () => {
-    const index = RES_TO_MODEL.findIndex((item) => item[0] === modelResolution);
-    if (index === RES_TO_MODEL.length - 1) {
-      setModelResolution(RES_TO_MODEL[0][0]);
-      setModelName(RES_TO_MODEL[0][1]);
-    } else {
-      setModelResolution(RES_TO_MODEL[index + 1][0]);
-      setModelName(RES_TO_MODEL[index + 1][1]);
-    }
+    // const index = RES_TO_MODEL.findIndex((item) => item[0] === modelResolution);
+    // if (index === RES_TO_MODEL.length - 1) {
+    //   setModelResolution(RES_TO_MODEL[0][0]);
+    //   setModelName(RES_TO_MODEL[0][1]);
+    // } else {
+    //   setModelResolution(RES_TO_MODEL[index + 1][0]);
+    //   setModelName(RES_TO_MODEL[index + 1][1]);
+    // }
   };
 
   const resizeCanvasCtx = (
@@ -171,6 +194,19 @@ const Yolo = (props: any) => {
         " " +
         score.toString() +
         "%";
+      if(score>30){
+          const watchId: number = navigator.geolocation.watchPosition(
+            (position: GeolocationPosition) => {
+              const { latitude, longitude } = position.coords;
+              console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+              if(latt != latitude && lngg != longitude){
+                saveToCSV(latitude, longitude);
+                latt = latitude;
+                lngg = longitude;
+              }
+            }
+          );
+      }
       const color = conf2color(score / 100);
 
       ctx.strokeStyle = color;
