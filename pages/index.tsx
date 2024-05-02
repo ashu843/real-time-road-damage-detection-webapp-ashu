@@ -10,13 +10,7 @@ export default function Home() {
         <h1 className="m-5 text-xl font-bold">Real-Time Object Detection</h1>
         <Yolo />
         <p className="m-5">
-          Created by{" "}
-          <a
-            className="underline underline-offset-1 hover:translate-y-1"
-            href="https://juanjaho.github.io/"
-          >
-            @juanjaho
-          </a>
+          Created by MSMAHESH
         </p>
       </main>
     </>
