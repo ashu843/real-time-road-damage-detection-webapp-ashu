@@ -14,10 +14,7 @@ let latt = 0.000
 let lngg = 0.000
 
 const RES_TO_MODEL: [number[], string][] = [
-  [[640, 640], "yolov7-tiny_640x640.onnx"],
-  //[[256,256], "yolov7-tiny_256x256.onnx"],
-  //[[320, 320], "yolov7-tiny_320x320.onnx"],
-  //[[640, 640], "yolov7-tiny_640x640_original.onnx"],
+  [[640, 640], "yolov8-tiny_640x640.onnx"]
 ];
 
 const saveToCSV = async (latitude: number, longitude: number) => {
@@ -195,6 +192,9 @@ const Yolo = (props: any) => {
         score.toString() +
         "%";
       if(score>30){
+          const options = {
+            enableHighAccuracy: true,
+          };
           const watchId: number = navigator.geolocation.watchPosition(
             (position: GeolocationPosition) => {
               const { latitude, longitude } = position.coords;
@@ -204,7 +204,9 @@ const Yolo = (props: any) => {
                 latt = latitude;
                 lngg = longitude;
               }
-            }
+            },
+            null,
+            options
           );
       }
       const color = conf2color(score / 100);
