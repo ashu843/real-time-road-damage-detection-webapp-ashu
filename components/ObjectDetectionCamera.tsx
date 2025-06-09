@@ -215,7 +215,7 @@ const WebcamComponent = (props: any) => {
             </button>
           </div>
         </div>
-        <div>Using YOLOv7 Model</div>
+        <div>Using YOLOv8 Model</div>
         <div className="flex gap-3 flex-row flex-wrap justify-between items-center px-5 w-full">
           <div>
             {"Model Inference Time: " + inferenceTime.toFixed() + "ms"}
