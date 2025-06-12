@@ -17,21 +17,23 @@ const RES_TO_MODEL: [number[], string][] = [
   [[640, 640], "yolov8-tiny_640x640.onnx"]
 ];
 
-const saveToCSV = async (latitude: number, longitude: number) => {
+const saveToSupabase = async (latitude: number, longitude: number) => {
   try {
-    const response = await fetch('http://localhost:5000/save-to-csv', {
+    const response = await fetch('/api/potholes', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ latitude, longitude }),
     });
-    const data = await response.json();
-    console.log(data);
+
+    const result = await response.json();
+    console.log(result);
   } catch (error) {
-    console.error('Error saving data:', error);
+    console.error('Error saving pothole:', error);
   }
 };
+
 
 
 const Yolo = (props: any) => {
@@ -199,11 +201,11 @@ const Yolo = (props: any) => {
             (position: GeolocationPosition) => {
               const { latitude, longitude } = position.coords;
               console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
-              if(latt != latitude && lngg != longitude){
-                saveToCSV(latitude, longitude);
+              if (latt != latitude && lngg != longitude) {
+                saveToSupabase(latitude, longitude);
                 latt = latitude;
                 lngg = longitude;
-              }
+              }              
             },
             null,
             options
